@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Fleet Mitra · Campus lost &amp; found</title>
+  <meta name="description" content="Fleet Mitra is a campus lost and found board: post what you lost or found, answer one private question, and hand it back safely.">
+  <meta name="theme-color" content="#1d5c66">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/plus-jakarta-sans/plus-jakarta-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="ribbon" id="demo-ribbon" role="note">
+    <div class="container ribbon__inner">
+      <span class="ribbon__dot" aria-hidden="true"></span>
+      <p class="ribbon__text">Live demo: data is stored only in this browser. Use <button type="button" class="link-btn link-btn--light" data-action="reset">Reset demo data</button> to start fresh.</p>
+      <button type="button" class="ribbon__close" data-action="dismiss-ribbon" aria-label="Hide this notice">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#/" aria-label="Fleet Mitra, back to the board">
+        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="19.5" fill="#1d5c66"/>
+          <path d="M20 6.5V3M20 33.5V37M6.5 20H3M33.5 20H37M29.5 10.5l2.5-2.5M10.5 10.5 8 8M29.5 29.5l2.5 2.5M10.5 29.5 8 32" stroke="#fff" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="20" cy="20" r="13" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.8"/>
+          <path d="M20 9 23 20 20 31 17 20Z" fill="#fff"/>
+          <path d="M20 9 23 20H17Z" fill="#e8a33d"/>
+          <path d="M9 20 20 17.7 31 20 20 22.3Z" fill="#fff" fill-opacity=".7"/>
+          <circle cx="20" cy="20" r="2.6" fill="#1d5c66" stroke="#fff" stroke-width="1.4"/>
+        </svg>
+        <span class="brand__word">Fleet <span class="brand__accent">Mitra</span></span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Main">
+        <a class="nav__link" href="#/" data-route="board">Board</a>
+        <a class="nav__link" href="#/mine" data-route="mine" hidden>My reports</a>
+        <a class="nav__link" href="#/admin" data-route="admin" hidden>Admin</a>
+      </nav>
+
+      <div class="topbar__actions">
+        <div class="account" id="account">
+          <span class="account__placeholder" aria-hidden="true"></span>
+        </div>
+        <button type="button" class="btn btn--primary topbar__report" data-action="report">
+          <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="hide-sm">Report an item</span><span class="show-sm">Report</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- ============ Board ============ -->
+    <div class="view" data-view="board">
+      <section class="hero" aria-labelledby="hero-title">
+        <svg class="hero__art" viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g fill="none" stroke="#fff">
+            <g opacity=".09" stroke-width="1.5">
+              <circle cx="1030" cy="90" r="170"/><circle cx="1030" cy="90" r="122"/><circle cx="1030" cy="90" r="74"/>
+              <path d="M1030-110v400M830 90h400M889-51l282 282M889 231l282-282"/>
+            </g>
+            <path d="M0 360c150-34 300 34 450 0s300-34 450 0 225 30 300 8" opacity=".12" stroke-width="2"/>
+            <path d="M0 392c150-34 300 34 450 0s300-34 450 0 225 30 300 8" opacity=".08" stroke-width="2"/>
+            <path d="M0 424c150-34 300 34 450 0s300-34 450 0 225 30 300 8" opacity=".05" stroke-width="2"/>
+          </g>
+        </svg>
+        <div class="container hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow eyebrow--light">Campus lost &amp; found</p>
+            <h1 class="hero__title" id="hero-title">Every lost thing deserves a way back.</h1>
+            <p class="hero__text">Post what you lost or found, answer one private question, and hand it back safely.</p>
+            <div class="hero__actions">
+              <button type="button" class="btn btn--light btn--lg" data-action="report" data-type="lost">Report lost item</button>
+              <button type="button" class="btn btn--accent btn--lg" data-action="report" data-type="found">I found something</button>
+            </div>
+            <ol class="hero__steps" aria-label="How it works">
+              <li><span>1</span>Post it</li>
+              <li><span>2</span>Answer a private question</li>
+              <li><span>3</span>Hand it back</li>
+            </ol>
+          </div>
+
+          <form class="finder" id="hero-search" role="search" aria-labelledby="finder-title">
+            <h2 class="finder__title" id="finder-title">What are you looking for?</h2>
+            <p class="finder__sub">Search item names, descriptions and campus places.</p>
+            <label class="field">
+              <span class="field__label">Keyword</span>
+              <span class="input-wrap">
+                <svg viewBox="0 0 24 24" class="icon input-wrap__icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input type="search" name="q" maxlength="80" placeholder="Bottle, calculator, library…" autocomplete="off">
+              </span>
+            </label>
+            <label class="field">
+              <span class="field__label">Category</span>
+              <select name="category" class="category-select">
+                <option value="">All categories</option>
+              </select>
+            </label>
+            <button type="submit" class="btn btn--primary btn--block btn--lg">Search the board</button>
+            <p class="finder__popular">
+              <span>Popular:</span>
+              <button type="button" class="chip" data-action="quick-search" data-q="bottle">Bottle</button>
+              <button type="button" class="chip" data-action="quick-search" data-q="calculator">Calculator</button>
+              <button type="button" class="chip" data-action="quick-search" data-q="key">Keys</button>
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <div class="container">
+        <div class="stats" id="stats">
+          <button type="button" class="stat" data-action="tab" data-tab="lost">
+            <span class="stat__icon stat__icon--lost" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            </span>
+            <span class="stat__text"><span class="stat__num" id="stat-lost">–</span><span class="stat__label">Still missing</span></span>
+          </button>
+          <button type="button" class="stat" data-action="tab" data-tab="found">
+            <span class="stat__icon stat__icon--found" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l3-8h12l3 8v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 13h5l1.5 2.5h5L16 13h5"/></svg>
+            </span>
+            <span class="stat__text"><span class="stat__num" id="stat-found">–</span><span class="stat__label">Found, waiting for owners</span></span>
+          </button>
+          <button type="button" class="stat" data-action="tab" data-tab="returned">
+            <span class="stat__icon stat__icon--returned" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg>
+            </span>
+            <span class="stat__text"><span class="stat__num" id="stat-returned">–</span><span class="stat__label">Returned to owners</span></span>
+          </button>
+        </div>
+      </div>
+
+      <section class="container board" id="board" aria-labelledby="board-title">
+        <div class="board__head">
+          <div>
+            <h2 class="section-title" id="board-title">Latest reports</h2>
+            <p class="board__summary" id="board-summary" aria-live="polite">Loading reports…</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="tabs" role="group" aria-label="Show reports">
+            <button type="button" class="tab" data-action="tab" data-tab="all" aria-pressed="true">All</button>
+            <button type="button" class="tab" data-action="tab" data-tab="lost" aria-pressed="false">Lost</button>
+            <button type="button" class="tab" data-action="tab" data-tab="found" aria-pressed="false">Found</button>
+            <button type="button" class="tab" data-action="tab" data-tab="returned" aria-pressed="false">Returned</button>
+          </div>
+          <div class="toolbar__filters">
+            <label class="search-box">
+              <span class="sr-only">Search reports</span>
+              <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input type="search" id="board-q" maxlength="80" placeholder="Search items or places…" autocomplete="off">
+            </label>
+            <label class="select-box">
+              <span class="sr-only">Category</span>
+              <select id="board-category" class="category-select">
+                <option value="">All categories</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid" id="board-grid" aria-busy="true">
+          <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--sm"></span><span class="sk"></span><span class="sk sk--lg"></span></div></div>
+          <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--sm"></span><span class="sk"></span><span class="sk sk--lg"></span></div></div>
+          <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--sm"></span><span class="sk"></span><span class="sk sk--lg"></span></div></div>
+          <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--sm"></span><span class="sk"></span><span class="sk sk--lg"></span></div></div>
+        </div>
+        <p class="board__note">Sample posts are labelled <span class="pill pill--demo">Demo</span> and can't receive claims. Post a report of your own to try the full workflow.</p>
+      </section>
+    </div>
+
+    <!-- ============ My reports ============ -->
+    <div class="view" data-view="mine" hidden>
+      <div class="container page">
+        <header class="page-head">
+          <div>
+            <p class="eyebrow">Your corner of campus</p>
+            <h1 class="page-title">My reports</h1>
+            <p class="page-sub">Everything you've posted and every claim you've sent.</p>
+          </div>
+          <button type="button" class="btn btn--primary" data-action="report">
+            <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Report an item
+          </button>
+        </header>
+        <section class="block" aria-labelledby="mine-items-title">
+          <h2 class="section-title" id="mine-items-title">Your items <span class="count" id="mine-items-count">0</span></h2>
+          <div class="grid" id="mine-items"></div>
+        </section>
+        <section class="block" aria-labelledby="mine-claims-title">
+          <h2 class="section-title" id="mine-claims-title">Claims you've sent <span class="count" id="mine-claims-count">0</span></h2>
+          <div class="list" id="mine-claims"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ============ Admin ============ -->
+    <div class="view" data-view="admin" hidden>
+      <div class="container page">
+        <header class="page-head">
+          <div>
+            <p class="eyebrow">Keeping the board safe</p>
+            <h1 class="page-title">Admin dashboard</h1>
+            <p class="page-sub">Moderate listings and keep an eye on claims.</p>
+          </div>
+        </header>
+        <div class="kpis" id="admin-kpis"></div>
+        <div class="admin-grid">
+          <section class="panel" aria-labelledby="admin-reports-title">
+            <h2 class="section-title" id="admin-reports-title">All reports <span class="count" id="admin-reports-count">0</span></h2>
+            <p class="panel__sub">Hiding removes a listing from public search without deleting it. Restore puts back its earlier status.</p>
+            <div class="list" id="admin-reports"></div>
+          </section>
+          <section class="panel" aria-labelledby="admin-claims-title">
+            <h2 class="section-title" id="admin-claims-title">Recent claims <span class="count" id="admin-claims-count">0</span></h2>
+            <p class="panel__sub">Latest verified claims across the board.</p>
+            <div class="list" id="admin-claims"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="brand__word">Fleet <span class="brand__accent">Mitra</span></span>
+        <span class="footer__tagline">Your campus friend for lost &amp; found.</span>
+      </div>
+      <div class="footer__links">
+        <a class="footer__link" href="tests.html">
+          <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></svg>
+          Run self-test
+        </a>
+        <button type="button" class="footer__link" data-action="reset">
+          <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          Reset demo data
+        </button>
+      </div>
+    </div>
+    <div class="container footer__fine">
+      <p>Live demo: data is stored only in this browser. Use Reset demo data to start fresh.</p>
+      <p>Fleet Mitra · academic prototype · demo data only</p>
+    </div>
+  </footer>
+
+  <!-- ============ Sign in ============ -->
+  <dialog class="modal" id="dlg-signin" aria-labelledby="signin-title">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <p class="eyebrow">Sign in</p>
+      <h2 class="modal__title" id="signin-title">Welcome back</h2>
+      <p class="modal__sub">Sign in to report items, send claims and track returns.</p>
+      <p class="notice notice--info" id="signin-reason" hidden></p>
+      <form class="form" id="form-signin">
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input type="email" name="email" autocomplete="email" required maxlength="120" placeholder="you@college.test">
+        </label>
+        <label class="field">
+          <span class="field__label">Password</span>
+          <input type="password" name="password" autocomplete="current-password" required maxlength="128">
+        </label>
+        <p class="form-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn--dark btn--block btn--lg">Sign in</button>
+      </form>
+      <p class="modal__switch">New to Fleet Mitra? <button type="button" class="link-btn" data-action="join">Create an account</button></p>
+      <div class="demo-accounts">
+        <p class="demo-accounts__title">Demo accounts <span>Password for all: <code>demo1234</code></span></p>
+        <ul class="demo-accounts__list" id="demo-accounts"></ul>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ============ Join ============ -->
+  <dialog class="modal" id="dlg-join" aria-labelledby="join-title">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <p class="eyebrow">New member</p>
+      <h2 class="modal__title" id="join-title">Join Fleet Mitra</h2>
+      <p class="modal__sub">One account to report, claim and track returns.</p>
+      <p class="notice notice--info" id="join-reason" hidden></p>
+      <form class="form" id="form-join">
+        <label class="field">
+          <span class="field__label">Full name</span>
+          <input type="text" name="name" autocomplete="name" required minlength="2" maxlength="60" placeholder="Your name">
+        </label>
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input type="email" name="email" autocomplete="email" required maxlength="120" placeholder="you@college.test">
+        </label>
+        <label class="field">
+          <span class="field__label">Password</span>
+          <input type="password" name="password" autocomplete="new-password" required minlength="8" maxlength="128" aria-describedby="join-password-hint">
+          <span class="field__hint" id="join-password-hint">At least 8 characters.</span>
+        </label>
+        <p class="form-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn--dark btn--block btn--lg">Create account</button>
+      </form>
+      <p class="modal__switch">Already a member? <button type="button" class="link-btn" data-action="signin">Sign in</button></p>
+    </div>
+  </dialog>
+
+  <!-- ============ Report an item ============ -->
+  <dialog class="modal modal--wide" id="dlg-report" aria-labelledby="report-title">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <p class="eyebrow">Let campus help</p>
+      <h2 class="modal__title" id="report-title">Report an item</h2>
+      <p class="modal__sub">Public details help people recognise it. Keep the secret answer private.</p>
+      <form class="form" id="form-report">
+        <div class="form-row">
+          <label class="field">
+            <span class="field__label">I have...</span>
+            <select name="type" required>
+              <option value="lost">Lost something</option>
+              <option value="found">Found something</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field__label">Category</span>
+            <select name="category" class="category-select" required></select>
+          </label>
+        </div>
+        <label class="field">
+          <span class="field__label">Item name</span>
+          <input type="text" name="title" required minlength="3" maxlength="80" placeholder="e.g. Silver steel water bottle">
+        </label>
+        <label class="field">
+          <span class="field__label">Description</span>
+          <textarea name="description" rows="3" required minlength="10" maxlength="1000" placeholder="Colour, brand, marks, what was with it… Leave out contact details and the secret answer."></textarea>
+        </label>
+        <div class="form-row">
+          <label class="field">
+            <span class="field__label">Location</span>
+            <input type="text" name="location" required minlength="2" maxlength="80" list="campus-places" placeholder="e.g. Library first floor">
+          </label>
+          <label class="field">
+            <span class="field__label">Date lost or found</span>
+            <input type="date" name="event_date" required>
+          </label>
+        </div>
+        <datalist id="campus-places">
+          <option value="Library first floor"></option>
+          <option value="Main canteen"></option>
+          <option value="Bus bay"></option>
+          <option value="Exam hall B"></option>
+          <option value="Hostel gate"></option>
+          <option value="Auditorium"></option>
+          <option value="Chemistry lab"></option>
+          <option value="Sports ground"></option>
+        </datalist>
+        <div class="field">
+          <span class="field__label" id="photo-label">Photo (optional)</span>
+          <div class="upload">
+            <div class="upload__preview" id="photo-preview">
+              <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
+            </div>
+            <div class="upload__body">
+              <input type="file" name="photo" id="report-photo" accept="image/jpeg,image/png,image/webp" aria-labelledby="photo-label" aria-describedby="photo-hint">
+              <span class="field__hint" id="photo-hint">JPG, PNG, or WebP · Maximum 5 MB</span>
+              <button type="button" class="link-btn" id="photo-remove" hidden>Remove photo</button>
+            </div>
+          </div>
+        </div>
+        <fieldset class="private-box">
+          <legend>
+            <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+            Private check
+          </legend>
+          <label class="field">
+            <span class="field__label">Verification question</span>
+            <input type="text" name="verification_question" required minlength="5" maxlength="160" placeholder="e.g. What sticker is on the bottle?" aria-describedby="question-hint">
+            <span class="field__hint" id="question-hint">Ask about a detail only the owner, or whoever is holding the item, would know.</span>
+          </label>
+          <label class="field">
+            <span class="field__label">Secret answer</span>
+            <input type="text" name="secret_answer" required maxlength="80" autocomplete="off" aria-describedby="answer-hint">
+            <span class="field__hint" id="answer-hint">Stored privately. Answers are not case-sensitive.</span>
+          </label>
+        </fieldset>
+        <p class="form-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn--dark btn--block btn--lg">Post to the board</button>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ============ Item details ============ -->
+  <dialog class="modal modal--item" id="dlg-item" aria-labelledby="item-title">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div id="item-body"></div>
+    </div>
+  </dialog>
+
+  <!-- ============ Confirm ============ -->
+  <dialog class="modal modal--sm" id="dlg-confirm" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+    <div class="modal__inner confirm">
+      <span class="confirm__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>
+      </span>
+      <h2 class="confirm__title" id="confirm-title">Are you sure?</h2>
+      <p class="confirm__text" id="confirm-text"></p>
+      <div class="confirm__actions">
+        <button type="button" class="btn btn--ghost" data-close>Cancel</button>
+        <button type="button" class="btn btn--dark" id="confirm-ok">Confirm</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" popover="manual" aria-live="polite"></div>
+
+  <noscript><p class="noscript">Fleet Mitra needs JavaScript to run this live demo.</p></noscript>
+</body>
+</html>

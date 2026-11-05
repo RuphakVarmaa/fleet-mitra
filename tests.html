@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Self-test · Fleet Mitra</title>
+  <meta name="description" content="Live backend self-test for the Fleet Mitra demo: the 31 checks from the project report.">
+  <meta name="theme-color" content="#1d5c66">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="module" src="assets/tests.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./" aria-label="Fleet Mitra, back to the board">
+        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="19.5" fill="#1d5c66"/>
+          <path d="M20 6.5V3M20 33.5V37M6.5 20H3M33.5 20H37M29.5 10.5l2.5-2.5M10.5 10.5 8 8M29.5 29.5l2.5 2.5M10.5 29.5 8 32" stroke="#fff" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="20" cy="20" r="13" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.8"/>
+          <path d="M20 9 23 20 20 31 17 20Z" fill="#fff"/>
+          <path d="M20 9 23 20H17Z" fill="#e8a33d"/>
+          <path d="M9 20 20 17.7 31 20 20 22.3Z" fill="#fff" fill-opacity=".7"/>
+          <circle cx="20" cy="20" r="2.6" fill="#1d5c66" stroke="#fff" stroke-width="1.4"/>
+        </svg>
+        <span class="brand__word">Fleet <span class="brand__accent">Mitra</span></span>
+      </a>
+      <div class="topbar__actions">
+        <a class="btn btn--ghost" href="./">Back to the board</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container tests-page" id="main">
+    <div class="tests-head">
+      <div>
+        <p class="eyebrow">Backend verification</p>
+        <h1 class="page-title">Self-test</h1>
+        <p class="page-sub">The report's 31 backend checks, run live against the API layer.</p>
+      </div>
+      <button type="button" class="btn btn--primary" id="run-again" disabled>Run again</button>
+    </div>
+
+    <div class="tests-summary" id="summary">
+      <span class="tests-summary__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></svg>
+      </span>
+      <div>
+        <p class="tests-total" id="total" aria-live="polite">Running checks…</p>
+        <p class="tests-note">Uses a fresh in-memory database and session. Your saved demo data is not touched.</p>
+      </div>
+    </div>
+
+    <div id="results"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__fine">
+      <p>Fleet Mitra · academic prototype · demo data only</p>
+    </div>
+  </footer>
+</body>
+</html>

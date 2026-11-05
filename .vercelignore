@@ -1,0 +1,4 @@
+SPEC.md
+e2e/
+node_modules/
+*.log
