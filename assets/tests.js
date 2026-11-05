@@ -304,12 +304,17 @@ async function buildSuite() {
       expect(status === 'approved' && itemStatus === 'returned', 'state was not persisted');
       const mine = expectOk(await userB.send('my_reports'), 'my_reports');
       expect(mine.claims.find((c) => c.id === ctx.claimB).status === 'approved', 'claimant view not updated');
+      // The item details tell the claimant what happened, even though the item is no longer open.
+      const seen = expectOk(await userB.send('item', { id: ctx.itemA }), 'item').item;
+      expect(seen.status === 'returned' && seen.my_claim?.status === 'approved', 'claimant cannot see the approved claim on the item');
     }],
     [GROUPS[5], 'A direct Mark as returned closes the pending claims on that item', async () => {
       expectOk(await userA.send('claim', { item_id: ctx.itemB, answer: 'orbit', message: 'That case is mine, thank you!' }), 'claim');
       const data = expectOk(await userB.send('mark_returned', { item_id: ctx.itemB }), 'mark_returned');
       expect(data.closed_claims === 1, 'pending claim was not closed');
       expect(findClaim(ctx.itemB, EMAIL_A).status === 'closed', 'claim still pending');
+      const seen = expectOk(await userA.send('item', { id: ctx.itemB }), 'item').item;
+      expect(seen.my_claim?.status === 'closed', 'claimant cannot see the closed claim on the item');
       expectError(await userB.send('mark_returned', { item_id: ctx.itemB }), 422);
     }],
 

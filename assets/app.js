@@ -484,16 +484,7 @@ function claimSection(item) {
     section.append(h('p', { class: 'notice notice--demo' }, icon('info'), h('span', {}, "Demo listings can't receive claims.")));
     return section;
   }
-  if (item.status !== 'open') {
-    section.append(h('p', { class: 'muted-box' }, 'This item has been returned, so it no longer takes claims.'));
-    return section;
-  }
-  if (!state.user) {
-    section.append(h('div', { class: 'signin-cta' },
-      h('p', {}, 'Answer the poster’s private question to send them a message. You need an account so they can reach you.'),
-      h('button', { type: 'button', class: 'btn btn--dark', 'data-action': 'signin-to-claim', 'data-id': item.id }, icon('lock'), 'Sign in to claim')));
-    return section;
-  }
+  // A claimant always sees what happened to their own claim, also after the item was returned.
   if (item.my_claim) {
     const notes = {
       pending: 'The poster can now see your message and email address. They will contact you to arrange the handover.',
@@ -504,6 +495,16 @@ function claimSection(item) {
       h('p', { class: 'my-claim__head' }, `You sent a claim on ${formatDate(item.my_claim.created_at)}`,
         h('span', { class: `chip-status chip-status--${item.my_claim.status}` }, item.my_claim.status)),
       h('p', { class: 'my-claim__text' }, notes[item.my_claim.status])));
+    return section;
+  }
+  if (item.status !== 'open') {
+    section.append(h('p', { class: 'muted-box' }, 'This item has been returned, so it no longer takes claims.'));
+    return section;
+  }
+  if (!state.user) {
+    section.append(h('div', { class: 'signin-cta' },
+      h('p', {}, 'Answer the poster’s private question to send them a message. You need an account so they can reach you.'),
+      h('button', { type: 'button', class: 'btn btn--dark', 'data-action': 'signin-to-claim', 'data-id': item.id }, icon('lock'), 'Sign in to claim')));
     return section;
   }
 
@@ -730,21 +731,29 @@ function setReason(id, reason) {
   box.hidden = !reason;
 }
 
+/** The reason shown in a dialog that is open right now (carried over when switching sign in <-> join). */
+function openReason(dialog, id) {
+  const box = $(id);
+  return dialog.open && !box.hidden && box.textContent ? box.textContent : null;
+}
+
 function openSignIn(reason = null, after = null) {
   if (after) state.afterSignIn = after;
+  const carried = openReason(dialogs.join, '#join-reason');
   closeDialog(dialogs.join);
   const form = $('#form-signin');
   clearFormError(form);
-  setReason('#signin-reason', reason);
+  setReason('#signin-reason', reason ?? carried);
   openDialog(dialogs.signin);
   form.elements.email.focus();
 }
 
 function openJoin(reason = null) {
+  const carried = openReason(dialogs.signin, '#signin-reason');
   closeDialog(dialogs.signin);
   const form = $('#form-join');
   clearFormError(form);
-  setReason('#join-reason', reason ?? $('#signin-reason').textContent ?? null);
+  setReason('#join-reason', reason ?? carried);
   openDialog(dialogs.join);
   form.elements.name.focus();
 }
@@ -954,10 +963,12 @@ function wireEvents() {
   $('#photo-remove').addEventListener('click', resetPhoto);
 
   dialogs.item.addEventListener('close', () => { state.openItemId = null; });
-  dialogs.signin.addEventListener('close', () => {
-    // Keep the "after sign-in" step only while the visitor is still signing in or joining.
-    setTimeout(() => { if (!dialogs.join.open && !dialogs.signin.open) state.afterSignIn = null; }, 0);
-  });
+  for (const dialog of [dialogs.signin, dialogs.join]) {
+    dialog.addEventListener('close', () => {
+      // Keep the "after sign-in" step only while the visitor is still signing in or joining.
+      setTimeout(() => { if (!dialogs.join.open && !dialogs.signin.open) state.afterSignIn = null; }, 0);
+    });
+  }
 
   window.addEventListener('hashchange', () => route());
 

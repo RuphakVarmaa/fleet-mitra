@@ -83,7 +83,10 @@ It must be served over http(s) (not opened as a file) because the page loads `sc
 WebAssembly engine, and WebCrypto needs a secure context (localhost counts).
 
 Browser tests (Playwright, not deployed): `node e2e/selftest.mjs`, `node e2e/smoke.mjs`,
-`node e2e/demo.mjs` with the server running on port 5130.
+`node e2e/demo.mjs` with the server running on port 5130. `node e2e/flows.mjs [baseUrl] [1,2,...]`
+drives 11 user flows through the UI (guest, register, sign in, reporting, matches, claims,
+approval, mark as returned, admin, persistence/reset, mobile) and fails on any console error,
+failed request or HTTP status >= 400.
 
 ## Deploy
 
